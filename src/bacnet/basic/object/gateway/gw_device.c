@@ -489,6 +489,38 @@ int Routed_Device_Read_Property_Local(BACNET_READ_PROPERTY_DATA *rpdata)
             apdu_len =
                 encode_application_character_string(&apdu[0], &char_string);
             break;
+        case PROP_LOCATION:
+            characterstring_init_ansi(&char_string, pDev->Location);
+            apdu_len =
+                encode_application_character_string(&apdu[0], &char_string);
+            break;
+        case PROP_MODEL_NAME:
+            characterstring_init_ansi(&char_string, pDev->Model_Name);
+            apdu_len =
+                encode_application_character_string(&apdu[0], &char_string);
+            break;
+        case PROP_APPLICATION_SOFTWARE_VERSION:
+            characterstring_init_ansi(
+                &char_string, pDev->Application_Software_Version);
+            apdu_len =
+                encode_application_character_string(&apdu[0], &char_string);
+            break;
+        case PROP_VENDOR_IDENTIFIER:
+            apdu_len =
+                encode_application_unsigned(&apdu[0], pDev->Vendor_Identifier);
+            break;
+        case PROP_VENDOR_NAME:
+            characterstring_init_ansi(
+                &char_string,
+                (pDev->Vendor_Name != NULL) ? pDev->Vendor_Name : "");
+            apdu_len =
+                encode_application_character_string(&apdu[0], &char_string);
+            break;
+        case PROP_SERIAL_NUMBER:
+            characterstring_init_ansi(&char_string, pDev->Serial_Number);
+            apdu_len =
+                encode_application_character_string(&apdu[0], &char_string);
+            break;
         case PROP_DATABASE_REVISION:
             apdu_len =
                 encode_application_unsigned(&apdu[0], pDev->Database_Revision);
@@ -610,6 +642,81 @@ bool Routed_Device_Set_Description(const char *name, size_t length)
     if (length < MAX_DEV_DESC_LEN) {
         memmove(pDev->Description, name, length);
         pDev->Description[length] = 0;
+        status = true;
+    }
+
+    return status;
+}
+
+bool Routed_Device_Set_Location(const char *name, size_t length)
+{
+    bool status = false; /*return value */
+    DEVICE_OBJECT_DATA *pDev = &Devices[iCurrent_Device_Idx];
+
+    if (length < MAX_DEV_LOC_LEN) {
+        memmove(pDev->Location, name, length);
+        pDev->Location[length] = 0;
+        status = true;
+    }
+
+    return status;
+}
+
+bool Routed_Device_Set_Model_Name(const char *name, size_t length)
+{
+    bool status = false; /*return value */
+    DEVICE_OBJECT_DATA *pDev = &Devices[iCurrent_Device_Idx];
+
+    if (length < MAX_DEV_MOD_LEN) {
+        memmove(pDev->Model_Name, name, length);
+        pDev->Model_Name[length] = 0;
+        status = true;
+    }
+
+    return status;
+}
+
+bool Routed_Device_Set_Application_Software_Version(
+    const char *name, size_t length)
+{
+    bool status = false; /*return value */
+    DEVICE_OBJECT_DATA *pDev = &Devices[iCurrent_Device_Idx];
+
+    if (length < MAX_DEV_VER_LEN) {
+        memmove(pDev->Application_Software_Version, name, length);
+        pDev->Application_Software_Version[length] = 0;
+        status = true;
+    }
+
+    return status;
+}
+
+void Routed_Device_Set_Vendor_Identifier(uint16_t vendor_id)
+{
+    DEVICE_OBJECT_DATA *pDev = &Devices[iCurrent_Device_Idx];
+
+    pDev->Vendor_Identifier = vendor_id;
+}
+
+bool Routed_Device_Set_Vendor_Name(const char *name, size_t length)
+{
+    DEVICE_OBJECT_DATA *pDev = &Devices[iCurrent_Device_Idx];
+
+    /* Vendor_Name is a pointer whose lifetime is owned by the caller */
+    (void)length;
+    pDev->Vendor_Name = name;
+
+    return true;
+}
+
+bool Routed_Device_Set_Serial_Number(const char *name, size_t length)
+{
+    bool status = false; /*return value */
+    DEVICE_OBJECT_DATA *pDev = &Devices[iCurrent_Device_Idx];
+
+    if (length < MAX_DEV_DESC_LEN) {
+        memmove(pDev->Serial_Number, name, length);
+        pDev->Serial_Number[length] = 0;
         status = true;
     }
 
