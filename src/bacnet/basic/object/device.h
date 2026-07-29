@@ -216,6 +216,24 @@ typedef struct devObj_s {
     /** Device Description. */
     char Description[MAX_DEV_DESC_LEN];
 
+    /** Device Location. */
+    char Location[MAX_DEV_LOC_LEN];
+
+    /** Device Model Name. */
+    char Model_Name[MAX_DEV_MOD_LEN];
+
+    /** Device Application Software Version. */
+    char Application_Software_Version[MAX_DEV_VER_LEN];
+
+    /** Device Vendor Identifier. */
+    uint16_t Vendor_Identifier;
+
+    /** Device Vendor Name. Pointer whose lifetime is owned by the caller. */
+    const char *Vendor_Name;
+
+    /** Device Serial Number. */
+    char Serial_Number[MAX_DEV_DESC_LEN];
+
     /** The upcounter that shows if the Device ID or object structure has
      * changed. */
     uint32_t Database_Revision;
@@ -578,6 +596,19 @@ bool Routed_Device_Set_Object_Name(
     uint8_t encoding, const char *value, size_t length);
 BACNET_STACK_EXPORT
 bool Routed_Device_Set_Description(const char *name, size_t length);
+BACNET_STACK_EXPORT
+bool Routed_Device_Set_Location(const char *name, size_t length);
+BACNET_STACK_EXPORT
+bool Routed_Device_Set_Model_Name(const char *name, size_t length);
+BACNET_STACK_EXPORT
+bool Routed_Device_Set_Application_Software_Version(
+    const char *name, size_t length);
+BACNET_STACK_EXPORT
+void Routed_Device_Set_Vendor_Identifier(uint16_t vendor_id);
+BACNET_STACK_EXPORT
+bool Routed_Device_Set_Vendor_Name(const char *name, size_t length);
+BACNET_STACK_EXPORT
+bool Routed_Device_Set_Serial_Number(const char *name, size_t length);
 BACNET_STACK_EXPORT
 void Routed_Device_Inc_Database_Revision(void);
 BACNET_STACK_EXPORT
